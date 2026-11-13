@@ -1,0 +1,40 @@
+{
+  "fields": {
+    "name": {
+      "normalize": "text",
+      "rules": [
+        {"source": "list", "method": "tag_text", "tag": "h2", "class": "product-name"},
+        {"source": "list", "method": "tag_text", "tag": "h3", "class": "item-title"},
+        {"source": "detail", "method": "tag_text", "tag": "h1", "id": "product-title"},
+        {"source": "detail", "method": "tag_text", "tag": "h1", "class": "detail-title"}
+      ]
+    },
+    "price": {
+      "normalize": "price",
+      "rules": [
+        {"source": "list", "method": "tag_text", "tag": "span", "class": "price"},
+        {"source": "list", "method": "tag_text", "tag": "em", "class": "price"},
+        {"source": "detail", "method": "tag_text", "tag": "span", "id": "price"},
+        {"source": "detail", "method": "tag_text", "tag": "span", "class": "price"},
+        {"source": "any", "method": "regex", "pattern": "([¥￥]?[0-9][0-9,]*(?:\\.[0-9]+)?)\\s*元"}
+      ]
+    },
+    "sku": {
+      "normalize": "text",
+      "rules": [
+        {"source": "list", "method": "attr", "tag": "div", "class": "product-item", "attr": "data-sku"},
+        {"source": "any", "method": "regex", "pattern": "(?:SKU|编号)\\s*[:：]\\s*([A-Za-z0-9-]+)"},
+        {"source": "detail", "method": "tag_text", "tag": "span", "class": "spec", "index": 1}
+      ]
+    },
+    "image_url": {
+      "normalize": "url",
+      "rules": [
+        {"source": "list", "method": "attr", "tag": "img", "class": "product-img", "attr": "src",
+         "match": "(?i)^(?!.*(?:placeholder|data:)).+\\.(?:png|jpe?g|webp)$"},
+        {"source": "detail", "method": "attr", "tag": "img", "id": "main-image", "attr": "src",
+         "match": "(?i)^(?!.*(?:placeholder|data:)).+\\.(?:png|jpe?g|webp)$"}
+      ]
+    }
+  }
+}
